@@ -7,4 +7,4 @@ class Video(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        self.title
+        return self.title

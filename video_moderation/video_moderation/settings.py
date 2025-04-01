@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,6 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'videos.apps.VideosConfig',
+    'corsheaders',
+    
+    "channels",
+
 ]
 
 MIDDLEWARE = [
@@ -50,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'video_moderation.urls'
@@ -125,10 +131,27 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Default media 
+# Default media PATH
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+# Allow Frontend (React) to access Django App
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173", # Vite React App
+    "http://127.0.0.1:5173", # Alternative localhost address
+]
 
-print(f'base_DIR {BASE_DIR}')
+# Allow all methods (GET, POST, PUT, DELETE)
+CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+
+# Allow all headers
+CORS_ALLOW_HEADERS = ["*"]
+
+ASGI_APPLICATION = "video_moderation.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
